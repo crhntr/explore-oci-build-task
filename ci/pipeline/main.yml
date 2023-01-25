@@ -23,6 +23,8 @@ jobs:
               trigger: true
           outputs:
             - name: image
+          env:
+            UNPACK_ROOTFS: true
           run:
             path: build
       - task: "run"
@@ -32,5 +34,6 @@ jobs:
           inputs:
             - name: explore-oci-build-task
           run:
-            path: go run .
+            path: go
+            args: ["run", "."]
 
