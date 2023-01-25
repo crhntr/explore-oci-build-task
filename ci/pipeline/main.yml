@@ -23,7 +23,7 @@ jobs:
               path: .
           outputs:
             - name: image
-          env:
+          params:
             UNPACK_ROOTFS: true
           run:
             path: build
