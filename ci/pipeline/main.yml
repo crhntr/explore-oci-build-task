@@ -1,0 +1,30 @@
+---
+resources:
+  - name: explore-oci-build-task
+    type: git
+    source:
+      uri: https://github.com/crhntr/explore-oci-build-task
+
+jobs:
+  - name: build
+    plan:
+      - get: explore-oci-build-task
+      - task: build-image
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: concourse/oci-build-task
+          inputs:
+            - name: explore-oci-build-task
+              path: .
+          outputs:
+            - name: image
+          output_mapping:
+            image: image-with-env
+          run:
+            path: build
+      - task: "run"
+        file: "explore-oci-build-task/ci/tasks/run.yml"

@@ -1,0 +1,10 @@
+---
+platform: linux
+
+image: "image-with-env"
+
+inputs:
+  - name: explore-oci-build-task
+
+run:
+  path: go run .
