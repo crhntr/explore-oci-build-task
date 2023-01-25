@@ -23,8 +23,9 @@ jobs:
           outputs:
             - name: image
           output_mapping:
-            image: image-with-env
+            image: image
           run:
             path: build
       - task: "run"
+        image: image
         file: "explore-oci-build-task/ci/tasks/run.yml"
