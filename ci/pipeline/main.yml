@@ -33,7 +33,8 @@ jobs:
           platform: linux
           inputs:
             - name: explore-oci-build-task
+          params:
+            SOME_VARIABLE: "¡Hola, mundo!"
           run:
-            path: go
-            args: ["run", "."]
+            path: "/main"
 
