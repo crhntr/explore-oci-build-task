@@ -20,12 +20,17 @@ jobs:
           inputs:
             - name: explore-oci-build-task
               path: .
+              trigger: true
           outputs:
             - name: image
-          output_mapping:
-            image: image
           run:
             path: build
       - task: "run"
         image: image
-        file: "explore-oci-build-task/ci/tasks/run.yml"
+        config:
+          platform: linux
+          inputs:
+            - name: explore-oci-build-task
+          run:
+            path: go run .
+
