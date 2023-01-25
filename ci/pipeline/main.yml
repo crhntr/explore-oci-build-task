@@ -9,6 +9,7 @@ jobs:
   - name: build
     plan:
       - get: explore-oci-build-task
+        trigger: true
       - task: build-image
         privileged: true
         config:
@@ -20,7 +21,6 @@ jobs:
           inputs:
             - name: explore-oci-build-task
               path: .
-              trigger: true
           outputs:
             - name: image
           env:
