@@ -1,6 +1,6 @@
 ---
 resources:
-  - name: explore-oci-build-task
+  - name: &repo-name explore-oci-build-task
     type: git
     source:
       uri: https://github.com/crhntr/explore-oci-build-task
@@ -8,7 +8,7 @@ resources:
 jobs:
   - name: build
     plan:
-      - get: explore-oci-build-task
+      - get: *repo-name
         trigger: true
       - task: build-image
         privileged: true
@@ -19,7 +19,7 @@ jobs:
             source:
               repository: concourse/oci-build-task
           inputs:
-            - name: explore-oci-build-task
+            - name: *repo-name
               path: .
           outputs:
             - name: image
