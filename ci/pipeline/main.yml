@@ -1,12 +1,22 @@
 ---
+secrets:
+  shared--gcr_service_account_key: &bam-gcr-key ((bam_gcr_key))
+
 resources:
   - name: &repo-name explore-oci-build-task
     type: git
     source:
       uri: https://github.com/crhntr/explore-oci-build-task
+  - name: &image-name explore-oci-build--delete-me
+    type: registry-image
+    source:
+      repository: gcr.io/mapbu-cryogenics/pivotalcfbam/explore-oci-build--delete-me
+      username: _json_key
+      password: *bam-gcr-key
+      tag: banana
 
 jobs:
-  - name: build
+  - name: &image-build-job-name build
     plan:
       - get: *repo-name
         trigger: true
@@ -23,11 +33,13 @@ jobs:
               path: .
           outputs:
             - name: image
+          caches:
+            - path: cache
           params:
             UNPACK_ROOTFS: true
           run:
             path: build
-      - task: "run"
+      - task: "smoke-test"
         image: image
         config:
           platform: linux
@@ -37,3 +49,48 @@ jobs:
             GREETING: "¡Hola, mundo!"
           run:
             path: "/main"
+      - put: *image-name
+        params:
+          image: image/image.tar
+
+
+  - name: i18n
+    plan:
+      - get: *image-name
+        trigger: true
+        passed:
+          - *image-build-job-name
+      - in_parallel:
+          steps:
+            - task: "spanish"
+              image: *image-name
+              config:
+                platform: linux
+                params:
+                  GREETING: "¡Hola, mundo!"
+                run:
+                  path: "/main"
+            - task: "english"
+              image: *image-name
+              config:
+                platform: linux
+                params:
+                  GREETING: "Hello, world!"
+                run:
+                  path: "/main"
+            - task: "ukrainian"
+              image: *image-name
+              config:
+                platform: linux
+                params:
+                  GREETING: "Привіт Світ!"
+                run:
+                  path: "/main"
+            - task: "italian"
+              image: *image-name
+              config:
+                platform: linux
+                params:
+                  GREETING: "Ciao mondo!"
+                run:
+                  path: "/main"
