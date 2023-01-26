@@ -34,7 +34,7 @@ jobs:
           inputs:
             - name: explore-oci-build-task
           params:
-            SOME_VARIABLE: "¡Hola, mundo!"
+            GREETING: "¡Hola, mundo!"
           run:
             path: "/main"
 
