@@ -37,4 +37,3 @@ jobs:
             GREETING: "¡Hola, mundo!"
           run:
             path: "/main"
-
