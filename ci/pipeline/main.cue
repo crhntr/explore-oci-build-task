@@ -11,7 +11,11 @@ let greetings = close({
 
 let defaultLanguage = "spanish"
 
-secrets: "shared--gcr_service_account_key": "((bam_gcr_key))"
+#secrets: {
+	// language=goregexp
+	[string]: =~ "^\\(\\([a-z0-9_]+\\)\\)$"
+}
+secrets: #secrets & { "shared--gcr_service_account_key": "((bam_gcr_key))" }
 
 resources: [{
 	name: "explore-oci-build-task"
@@ -28,15 +32,15 @@ resources: [{
 	}
 }]
 
-#greet: {
+#greet: close({
 	task:  string | *"greet"
 	image: imageName
-	config: {
+	config: close({
 		platform: "linux"
 		params: GREETING: string | *greetings[defaultLanguage]
 		run: path:        "/main"
-	}
-}
+	})
+})
 
 let buildJobName = "build"
 
