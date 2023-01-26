@@ -27,39 +27,14 @@ jobs:
             UNPACK_ROOTFS: true
           run:
             path: build
-      - task: "smoke-test"
+      - task: "run"
         image: image
         config:
           platform: linux
           inputs:
             - name: explore-oci-build-task
           params:
-            GREETING: "Hello, Build!"
+            SOME_VARIABLE: "¡Hola, mundo!"
           run:
             path: "/main"
 
-  - name: spanish
-    plan:
-      - task: "greet"
-        image: image
-        config:
-          platform: linux
-          inputs:
-            - name: explore-oci-build-task
-          params:
-            GREETING: "¡Hola, mundo!"
-          run:
-            path: "/main"
-
-  - name: english
-    plan:
-      - task: "greet"
-        image: image
-        config:
-          platform: linux
-          inputs:
-            - name: explore-oci-build-task
-          params:
-            GREETING: "Hello, World!"
-          run:
-            path: "/main"

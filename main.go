@@ -2,7 +2,7 @@ package main
 
 import "os"
 
-const varName = "GREETING"
+const varName = "SOME_VARIABLE"
 
 func main() {
 	value, found := os.LookupEnv(varName)
