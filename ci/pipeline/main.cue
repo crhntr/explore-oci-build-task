@@ -2,6 +2,15 @@ package pipeline
 
 let imageName = "explore-oci-build--delete-me"
 
+let greetings = close({
+  spanish:   "¡Hola, mundo!"
+	english:   "Hello, world!"
+	ukrainian: "Привіт Світ!"
+	italian:   "Ciao mondo!"
+})
+
+let defaultLanguage = "spanish"
+
 secrets: "shared--gcr_service_account_key": "((bam_gcr_key))"
 
 resources: [{
@@ -24,13 +33,15 @@ resources: [{
 	image: imageName
 	config: {
 		platform: "linux"
-		params: GREETING: string | *"¡Hola, mundo!"
+		params: GREETING: string | *greetings[defaultLanguage]
 		run: path:        "/main"
 	}
 }
 
+let buildJobName = "build"
+
 jobs: [{
-	name: "build"
+	name: buildJobName
 	plan: [{
 		get:     resources[0].name
 		trigger: true
@@ -64,21 +75,13 @@ jobs: [{
 	plan: [{
 		get:     imageName
 		trigger: true
-		passed: ["build"]
+		passed: [buildJobName]
 	}, {
-		in_parallel: steps: [
+		in_parallel: steps: [ for lang, message in greetings {
 			#greet & {
-				task: "spanish"
-			}, #greet & {
-				task: "english"
-				config: params: GREETING: "Hello, world!"
-			},
-			#greet & {
-				task: "ukrainian"
-				config: params: GREETING: "Привіт Світ!"
-			}, #greet & {
-				task: "italian"
-				config: params: GREETING: "Ciao mondo!"
-			}]
+				task: lang
+				config: params: GREETING: message
+			}
+		}]
 	}]
 }]
