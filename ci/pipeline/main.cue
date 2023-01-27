@@ -3,7 +3,7 @@ package pipeline
 let imageName = "explore-oci-build--delete-me"
 
 let greetings = close({
-  spanish:   "¡Hola, mundo!"
+	spanish:   "¡Hola, mundo!"
 	english:   "Hello, world!"
 	ukrainian: "Привіт Світ!"
 	italian:   "Ciao mondo!"
@@ -17,7 +17,7 @@ let secretExp = "^\\(\\([a-z0-9_]+\\)\\)$"
 	// language=goregexp
 	[string]: =~secretExp
 }
-secrets: #secrets & { "shared--gcr_service_account_key": "((bam_gcr_key))" }
+secrets: #secrets & {"shared--gcr_service_account_key": "((bam_gcr_key))"}
 
 let repoResource = {
 	name: "explore-oci-build-task"
@@ -37,10 +37,10 @@ resources: [repoResource, {
 }]
 
 #task: {
-	task: string
+	task:        string
 	privileged?: true | false
-	image?: string
-	file?: string
+	image?:      string
+	file?:       string
 	config?: {
 		platform: "linux"
 		params?: {[string]: string}
@@ -90,7 +90,7 @@ jobs: [{
 	}, #buildImage & {
 		config: inputs: [{name: repoResource.name}]
 	}, #greet & {
-		task: "smoke-test"
+		task:  "smoke-test"
 		image: "image"
 	}, {
 		put: imageName
