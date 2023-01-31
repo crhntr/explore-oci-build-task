@@ -14,4 +14,5 @@ RUN adduser \
   main-user
 USER main-user:main-user
 COPY --from=base /main .
+RUN echo $foo
 CMD ["./main"]

@@ -37,6 +37,7 @@ jobs:
             - path: cache
           params:
             UNPACK_ROOTFS: true
+            BUILD_ARG_foo: bar
           run:
             path: build
       - task: "smoke-test"
