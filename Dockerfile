@@ -14,5 +14,5 @@ RUN adduser \
   main-user
 USER main-user:main-user
 COPY --from=base /main .
-RUN echo $foo
+ENV GREETING=$greeting
 CMD ["./main"]
